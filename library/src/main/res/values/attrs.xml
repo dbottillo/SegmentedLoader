@@ -1,0 +1,9 @@
+<resources>
+
+    <declare-styleable name="SegmentedLoader">
+        <attr name="animated" format="boolean"/>
+        <attr name="loader_color" format="color"/>
+        <attr name="secondary_color" format="color"/>
+    </declare-styleable>
+
+</resources>
