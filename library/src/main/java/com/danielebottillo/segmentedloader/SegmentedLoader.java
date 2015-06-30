@@ -15,13 +15,16 @@ import java.util.ArrayList;
 
 public class SegmentedLoader extends View {
 
-    public int firstColor;
-    public int secondColor;
+    public int startColor;
+    public int middleColor;
+    public int endColor;
 
     private static final long FRAME_DURATION = 1000 / 60;
 
     private int lastColor = 0;
     private int currentColor;
+    private int numberOfSteps;
+    private int speed;
 
     private int w, h;
 
@@ -29,15 +32,14 @@ public class SegmentedLoader extends View {
     private int currentStep = 0;
 
     private boolean isAnimated = false;
-    private boolean reverted = false;
+    private boolean reversed = false;
     private boolean growing = true;
+    private boolean fillOnStart = false;
 
     Paint paint = new Paint();
     Path path = new Path();
 
     ArrayList<Segment> segments = new ArrayList<Segment>();
-    int numberOfSteps;
-
 
     public SegmentedLoader(Context context) {
         this(context, null);
@@ -51,24 +53,26 @@ public class SegmentedLoader extends View {
         super(context, attrs, defStyle);
 
         final TypedArray attrArray = getContext().obtainStyledAttributes(attrs, R.styleable.SegmentedLoader, defStyle, 0);
-        boolean animateOnCreation = attrArray.getBoolean(R.styleable.SegmentedLoader_animated, false);
-        firstColor = attrArray.getColor(R.styleable.SegmentedLoader_loader_color, Color.parseColor("#223049"));
-        secondColor = attrArray.getColor(R.styleable.SegmentedLoader_secondary_color, Color.parseColor("#00A4DF"));
-        lastColor = secondColor;
+        startColor = attrArray.getColor(R.styleable.SegmentedLoader_start_color, Color.parseColor("#223049"));
+        middleColor = attrArray.getColor(R.styleable.SegmentedLoader_middle_color, 0);
+        endColor = attrArray.getColor(R.styleable.SegmentedLoader_end_color, Color.parseColor("#00A4DF"));
+        reversed = attrArray.getBoolean(R.styleable.SegmentedLoader_reversed, false);
+        speed = attrArray.getInt(R.styleable.SegmentedLoader_speed, 1000);
+        fillOnStart = attrArray.getBoolean(R.styleable.SegmentedLoader_fill_on_start, false);
         attrArray.recycle();
-
         paint.setStyle(Paint.Style.FILL);
         paint.setAntiAlias(true);
-
-        currentColor = firstColor;
-        /*if (animateOnCreation) {
-            startAnimation();
-        }*/
+        currentColor = startColor;
     }
 
     public void addSegment(Segment segment) {
         segments.add(segment);
         invalidate();
+    }
+
+    public SegmentedLoader fillOnStart(){
+        fillOnStart = true;
+        return this;
     }
 
     public void hide() {
@@ -81,18 +85,23 @@ public class SegmentedLoader extends View {
         startAnimation();
     }
 
-    public void show(CharSequence message) {
-        // TODO: this method should be removed after ACH of new app
-        show();
-    }
-
-    public void setColor(int color) {
-        firstColor = color;
+    public void setStartColor(int color) {
+        startColor = color;
         invalidate();
     }
 
-    public SegmentedLoader setReverted() {
-        reverted = true;
+    public void setMiddleColor(int color) {
+        middleColor = color;
+        invalidate();
+    }
+
+    public void setEndColor(int color) {
+        endColor = color;
+        invalidate();
+    }
+
+    public SegmentedLoader setReversed() {
+        reversed = true;
         return this;
     }
 
@@ -105,7 +114,7 @@ public class SegmentedLoader extends View {
 
         if (!isAnimated) {
             // if it's not animated, then we can draw all the segments at the same time
-            paint.setColor(firstColor);
+            paint.setColor(startColor);
             for (Segment segment : segments) {
                 drawPathOnCanvasWithOffset(canvas, segment, 1.0f);
             }
@@ -151,8 +160,18 @@ public class SegmentedLoader extends View {
             if (currentPath == segments.size()) {
                 currentPath = 0;
                 lastColor = currentColor;
-                currentColor = lastColor == firstColor ? secondColor : firstColor;
-                if (reverted) {
+                if (currentColor == startColor) {
+                    if (middleColor != 0) {
+                        currentColor = middleColor;
+                    } else {
+                        currentColor = endColor;
+                    }
+                } else if (currentColor == middleColor) {
+                    currentColor = endColor;
+                } else {
+                    currentColor = startColor;
+                }
+                if (reversed) {
                     growing = !growing;
                 }
             }
@@ -168,34 +187,31 @@ public class SegmentedLoader extends View {
         }
     };
 
-    int segmentSpeed = 1000; // default is 1000 ms
-
-    public SegmentedLoader setSegmentSpeed(int ms) {
-        segmentSpeed = ms;
-        return this;
-    }
-
     public SegmentedLoader setSpeed(int ms) {
-        segmentSpeed = ms / segments.size();
+        speed = ms;
         return this;
     }
 
     public void startAnimation() {
         if (!isAnimated) {
             isAnimated = true;
+            if (fillOnStart){
+                lastColor = endColor;
+            }
             currentStep = 0;
+            int segmentSpeed = speed / segments.size();
             numberOfSteps = (int) ((segmentSpeed / FRAME_DURATION) / segments.size());
-            /*log(segmentSpeed + " - " + FRAME_DURATION + " - " + segments.size());
-            log(segmentSpeed / FRAME_DURATION + " - " + numberOfSteps);*/
             mHandler.removeCallbacks(mTick);
             mHandler.post(mTick);
         }
     }
 
-    private void stopAnimation() {
+    public void stopAnimation() {
         isAnimated = false;
         currentStep = 0;
         mHandler.removeCallbacks(mTick);
+        lastColor = 0;
+        invalidate();
     }
 
     private void drawGrowingLine(Path path, PointF start, PointF end, float offset) {
@@ -225,14 +241,6 @@ public class SegmentedLoader extends View {
         }
         path.close();
         canvas.drawPath(path, paint);
-    }
-
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        int height = MeasureSpec.getSize(heightMeasureSpec);
-        int width = MeasureSpec.getSize(widthMeasureSpec);
-        setMeasuredDimension(width, height);
     }
 
 }

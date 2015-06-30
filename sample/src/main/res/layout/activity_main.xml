@@ -1,30 +1,55 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:myapp="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="60dp"
+    android:padding="10dp"
     tools:context=".MainActivity">
 
     <com.danielebottillo.segmentedloader.SegmentedLoader
         android:id="@+id/loader"
+        myapp:fill_on_start="true"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"/>
 
     <com.danielebottillo.segmentedloader.SegmentedLoader
-        android:id="@+id/tw_loader"
+        android:id="@+id/loader_inverted"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"/>
+        android:layout_alignParentTop="true"
+        />
 
     <com.danielebottillo.segmentedloader.SegmentedLoader
-        android:id="@+id/tw_loader_inverted"
+        android:id="@+id/loader_three_colors"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"/>
+        android:layout_alignParentRight="true"
+        myapp:end_color="#FFE714"
+        myapp:middle_color="#DF321D"
+        myapp:start_color="#45ef45"/>
+
+    <com.danielebottillo.segmentedloader.SegmentedLoader
+        android:id="@+id/loader_three_colors_inverted"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        myapp:speed="5000"
+        myapp:end_color="#FFE714"
+        myapp:middle_color="#DF321D"
+        myapp:reversed="true"
+        myapp:start_color="#45ef45"/>
+
+    <Button
+        android:id="@+id/toogle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Toggle animation"/>
 
 </RelativeLayout>

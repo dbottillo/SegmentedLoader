@@ -1,9 +1,12 @@
 <resources>
 
     <declare-styleable name="SegmentedLoader">
-        <attr name="animated" format="boolean"/>
-        <attr name="loader_color" format="color"/>
-        <attr name="secondary_color" format="color"/>
+        <attr name="start_color" format="color"/>
+        <attr name="end_color" format="color"/>
+        <attr name="middle_color" format="color"/>
+        <attr name="reversed" format="boolean"/>
+        <attr name="fill_on_start" format="boolean"/>
+        <attr name="speed" format="integer"/>
     </declare-styleable>
 
 </resources>
