@@ -4,7 +4,7 @@ ext {
     bintrayRepo = 'maven'
     bintrayName = 'segmented-library'
 
-    publishedGroupId = 'com.github.dbottillo'
+    publishedGroupId = 'com.github.dbottillo.segmentedloader'
     libraryName = 'SegmentedLibrary'
     artifact = 'segmented-library'
 
