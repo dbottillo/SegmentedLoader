@@ -1,5 +1,29 @@
 apply plugin: 'com.android.library'
 
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'segmented-library'
+
+    publishedGroupId = 'com.github.dbottillo'
+    libraryName = 'SegmentedLibrary'
+    artifact = 'segmented-library'
+
+    libraryDescription = 'bla bla'
+
+    siteUrl = 'https://github.com/dbottillo/SegmentedLoader'
+    gitUrl = 'https://github.com/dbottillo/SegmentedLoader.git'
+
+    libraryVersion = '0.9.0'
+
+    developerId = 'dbottillo'
+    developerName = 'daniele Bottillo'
+    developerEmail = 'dbottillo@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
 android {
     compileSdkVersion 22
     buildToolsVersion "22.0.1"
@@ -22,3 +46,6 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.2.0'
 }
+
+apply from: 'jcenterInstall.gradle'
+apply from: 'bintray.gradle'
