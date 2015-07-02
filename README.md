@@ -16,7 +16,7 @@ All you have to do is add it on your gradle build:
 
 ```groovy
 dependencies {
-    compile 'com.github.dbottillo.segmentedloader:library:0.9.0'
+    compile 'com.github.dbottillo:segmented-loader:0.9.0'
 }
 ```
 
