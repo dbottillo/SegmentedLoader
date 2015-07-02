@@ -10,7 +10,7 @@ Small library allowing you to create a custom loader based on segments.
 
 ##Integration
 
-**SegmentedLoader** (min API 14):  [ ![Download](https://api.bintray.com/packages/dbottillo/maven/segmented-library/images/download.svg) ](https://bintray.com/dbottillo/maven/segmented-library/_latestVersion)
+**SegmentedLoader** (min API 14):  [ ![Download](https://api.bintray.com/packages/dbottillo/maven/segmented-loader/images/download.svg) ](https://bintray.com/dbottillo/maven/segmented-loader/_latestVersion)
 
 All you have to do is add it on your gradle build:
 
